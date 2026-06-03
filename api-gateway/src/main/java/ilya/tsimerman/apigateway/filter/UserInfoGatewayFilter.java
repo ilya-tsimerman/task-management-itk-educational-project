@@ -12,6 +12,9 @@ import org.springframework.web.reactive.function.client.WebClient;
 import org.springframework.web.server.ServerWebExchange;
 import reactor.core.publisher.Mono;
 
+import java.util.List;
+import java.util.stream.StreamSupport;
+
 import static reactor.netty.http.HttpConnectionLiveness.log;
 
 @Component
@@ -42,12 +45,14 @@ public class UserInfoGatewayFilter implements GlobalFilter {
                             .path("realm_access")
                             .path("roles");
 
-                    String roles = rolesNode.toString();
+                    List<String> roles = StreamSupport.stream(rolesNode.spliterator(), false)
+                            .map(JsonNode::asText)
+                            .toList();
 
                     ServerHttpRequest mutatedRequest = exchange.getRequest()
                             .mutate()
                             .header("user-id", userId)
-                            .header("user-roles", roles)
+                            .header("user-roles", String.join(",", roles))
                             .build();
                     log.info("HEADERS для отправки: user-id={}, user-roles={}", userId, roles);
                     ServerWebExchange mutatedExchange = exchange

@@ -7,6 +7,7 @@
 - task-service
 - auth-service
 - api-gateway
+- accounting-service
 
 ## Настройка проекта
 
@@ -29,9 +30,9 @@ sed -i '' 's/^KEY=.*/KEY=value/' .env
 ./gradlew build
 ./gradlew bootRun
 ```
-3. Запустить Docker Compose для PostgreSQL и Kafka и микросервисов:
+3. Запустить Docker Compose для PostgreSQL и KEYCLOAK:
 ```bash
-docker-compose up -d
+docker-compose up -d auth-db keycloak
 ```
 
 4. Настроить KEYCLOAK, а именно KEYCLOAK_CLIENT  
@@ -65,7 +66,7 @@ Realm → Clients → auth-service (Client ID) → Credentials
 - KEYCLOAK_ADMIN_PASSWORD=admin_password  
 
 **Настроить передачу User Realm Role в userinfo**  
-Client scopes → Client scope details → role (Protocol=openid-connect) → 
+Client scopes → role (Protocol=openid-connect) → 
 Mappers → Add mapper → By configuration → User Realm Role  
 И настроить
 
@@ -83,13 +84,16 @@ Mappers → Add mapper → By configuration → User Realm Role
 Realm roles → Create role  
 Role name = USER (можно любую роль)  
 → SAVE
-**Названить пользователям роли (после регистрации)**  
-USERS → username@dom.ru → Role Mapping → Assign role → Realm roles  
-выбрать роли → Assign  
+
+6. Запустить всю инфраструктуру и микросервисы:  
+```bash
+docker-compose up -d
+```
 
 ## Примечания
 - Файл .env не хранится в репозитории. Использовать .env.example как шаблон.
 - Собранные .jar файлы не включаются в репозиторий, их генерирует Gradle при сборке.
-- Keycloak в Admin Console и заполнением KEYCLOAK_CLIENT_ID и KEYCLOAK_CLIENT_SECRET в .env 
-требуется заполнить другие переменные из .env и поднять контейнеры 
+- Назначить пользователям роли в KEYCLOAK можно после поднятия контейнеров, после регистрации  
+  USERS → username@dom.ru → Role Mapping → Assign role → Realm roles  
+  выбрать роли → Assign
 - api-gateway -- единая точка входа, см. API в README.md внутри сервисов

@@ -16,6 +16,11 @@ spring:
               uri: http://task-service:8080
               predicates:
                 - Path=/api/tasks/**
+
+            - id: accounting-service
+              uri: http://accounting-service:8080
+              predicates:
+                - Path=/api/accounts/**
   security:
     oauth2:
       resourceserver:

@@ -6,8 +6,8 @@ import ilya.tsimerman.taskservice.domain.data.mapper.PageMapper;
 import ilya.tsimerman.taskservice.domain.data.mapper.TaskMapper;
 import ilya.tsimerman.taskservice.domain.data.model.Task;
 import ilya.tsimerman.taskservice.domain.data.model.User;
-import ilya.tsimerman.taskservice.domain.event.TaskCreatedFlowEvent;
-import ilya.tsimerman.taskservice.domain.event.TaskStreamEvent;
+import ilya.tsimerman.taskservice.domain.event.producer.TaskCreatedFlowEvent;
+import ilya.tsimerman.taskservice.domain.event.producer.TaskStreamEvent;
 import ilya.tsimerman.taskservice.domain.exception.EntityNotFoundException;
 import ilya.tsimerman.taskservice.domain.repository.TaskRepository;
 import ilya.tsimerman.taskservice.domain.repository.UserRepository;
@@ -20,6 +20,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.time.Instant;
+import java.util.UUID;
 
 @RequiredArgsConstructor
 @Service
@@ -72,7 +73,7 @@ public class TaskServiceImpl implements TaskService {
     @Override
     @Transactional
     public void assignTask(Long taskId, AssignTaskRequest userIdDto) {
-        Long userId = userIdDto.assigneeId();
+        UUID userId = userIdDto.assigneeId();
 
         Task task = taskRepository.findById(taskId)
                 .orElseThrow(() -> new EntityNotFoundException("Задача не найдена %s".formatted(taskId)));
@@ -100,6 +101,7 @@ public class TaskServiceImpl implements TaskService {
         TaskStatus newStatus = request.status();
         Task task = taskRepository.findById(id)
                 .orElseThrow(() -> new EntityNotFoundException("Задача не найдена %s".formatted(id)));
+        if (task.getStatus() == TaskStatus.DONE) throw new RuntimeException("Задача в DONE, её статус нельзя изменить");
         task.setStatus(newStatus);
 
         taskEventPublisher.publish(

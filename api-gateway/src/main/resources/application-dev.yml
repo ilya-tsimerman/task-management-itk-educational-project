@@ -10,6 +10,11 @@ spring.cloud.gateway.server.webflux.routes:
     predicates:
       - Path=/api/tasks/**
 
+  - id: accounting-service
+    uri: http://localhost:8083
+    predicates:
+      - Path=/api/accounts/**
+
 spring.security.oauth2.resourceserver.jwt.issuer-uri: http://localhost:9091/realms/master
 keycloak.base-url: http://localhost:9091
 

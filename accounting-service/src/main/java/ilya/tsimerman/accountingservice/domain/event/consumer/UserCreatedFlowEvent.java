@@ -1,4 +1,4 @@
-package ilya.tsimerman.authservice.domain.event;
+package ilya.tsimerman.accountingservice.domain.event.consumer;
 
 import java.time.Instant;
 

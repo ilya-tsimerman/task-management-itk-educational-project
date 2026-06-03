@@ -1,4 +1,4 @@
-package ilya.tsimerman.taskservice.domain.event;
+package ilya.tsimerman.taskservice.domain.event.producer;
 
 import lombok.Builder;
 

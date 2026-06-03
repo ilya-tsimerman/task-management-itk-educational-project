@@ -3,10 +3,10 @@ services:
     build: task-service
     container_name: task-service
     depends_on:
-      - postgres
+      - task-db
       - kafka
     environment:
-      SPRING_DATASOURCE_URL: jdbc:postgresql://postgres:5432/task_management
+      SPRING_DATASOURCE_URL: jdbc:postgresql://task-db:5432/task_service
       SPRING_DATASOURCE_USERNAME: ${POSTGRES_USERNAME}
       SPRING_DATASOURCE_PASSWORD: ${POSTGRES_PASSWORD}
       SPRING_KAFKA_BOOTSTRAP_SERVERS: kafka:9092
@@ -34,5 +34,18 @@ services:
     depends_on:
       - auth-service
       - task-service
+      - accounting-service
     ports:
       - "8082:8080"
+
+  accounting-service:
+    build: accounting-service
+    container_name: accounting-service
+    depends_on:
+      - accounting-db
+    environment:
+      SPRING_DATASOURCE_URL: jdbc:postgresql://accounting-db:5432/accounting_service
+      SPRING_DATASOURCE_USERNAME: ${POSTGRES_USERNAME}
+      SPRING_DATASOURCE_PASSWORD: ${POSTGRES_PASSWORD}
+    expose:
+      - "8080"

@@ -8,3 +8,9 @@ databaseChangeLog:
   - include:
       file: migrations/create/v3-add-indexes.yaml
       relativeToChangelogFile: true
+  - include:
+      file: migrations/update/v4-delete-test-user.yaml
+      relativeToChangelogFile: true
+  - include:
+      file: migrations/update/v5-users-tasks-uuid-external-id.yaml
+      relativeToChangelogFile: true

@@ -1,0 +1,68 @@
+databaseChangeLog:
+  - changeSet:
+      id: v5-users-tasks-uuid-external-id
+      author: ilya-tsimerman
+      changes:
+
+        - dropTable:
+            tableName: tasks
+            cascadeConstraints: true
+        - dropTable:
+            tableName: users
+            cascadeConstraints: true
+
+        - createTable:
+            tableName: users
+            columns:
+              - column:
+                  name: id
+                  type: UUID
+                  constraints:
+                    primaryKey: true
+                    nullable: false
+              - column:
+                  name: name
+                  type: VARCHAR(255)
+                  constraints:
+                    nullable: true
+              - column:
+                  name: email
+                  type: VARCHAR(255)
+                  constraints:
+                    nullable: true
+
+        - createTable:
+            tableName: tasks
+            columns:
+              - column:
+                  name: id
+                  type: BIGSERIAL
+                  autoIncrement: true
+                  constraints:
+                    primaryKey: true
+                    nullable: false
+              - column:
+                  name: title
+                  type: VARCHAR(255)
+                  constraints:
+                    nullable: false
+              - column:
+                  name: description
+                  type: TEXT
+              - column:
+                  name: status
+                  type: VARCHAR(50)
+                  constraints:
+                    nullable: false
+              - column:
+                  name: assignee_id
+                  type: UUID
+                  constraints:
+                    nullable: true
+
+        - addForeignKeyConstraint:
+            baseTableName: tasks
+            baseColumnNames: assignee_id
+            referencedTableName: users
+            referencedColumnNames: id
+            constraintName: fk_tasks_user

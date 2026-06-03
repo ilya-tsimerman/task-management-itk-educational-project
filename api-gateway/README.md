@@ -1,7 +1,8 @@
 #  Api Gateway
 
 ## Описание
-Сервис единой точки входа: переадресация на другие сервисы и проверка токена
+Сервис единой точки входа.  
+Позволяет получить доступ к API сервисов (переадресация на другие сервисы) с проверикой токена атворизации.
 
 ## API
 Базовый URL: `http://localhost:8082`  
@@ -22,6 +23,17 @@
         user-roles: [roles]
    ```
    
+3. **Переадресция на accounting-service**
+   - пользователь добавляет Headers (api gateway валидирует токен):
+   ```text
+        Authorization: Bearer access_token
+    ```
+   - api-gateway добавляет Headers (после валидации токена):
+   ```text
+        user-id: uuid
+        user-roles: [roles]
+   ```
+
 ## Технологии
 - Java 21, Spring Boot 3
 - Spring cloud Gateway Server

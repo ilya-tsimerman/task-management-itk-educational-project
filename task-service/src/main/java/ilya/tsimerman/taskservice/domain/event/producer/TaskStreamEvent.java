@@ -1,7 +1,9 @@
-package ilya.tsimerman.taskservice.domain.event;
+package ilya.tsimerman.taskservice.domain.event.producer;
 
 import ilya.tsimerman.taskservice.domain.data.common.TaskStatus;
 import lombok.Builder;
+
+import java.util.UUID;
 
 @Builder
 public record TaskStreamEvent(
@@ -9,5 +11,5 @@ public record TaskStreamEvent(
         String title,
         String description,
         TaskStatus status,
-        Long assigneeId
+        UUID assigneeId
 ) {}

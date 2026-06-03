@@ -1,10 +1,10 @@
 package ilya.tsimerman.taskservice.domain.data.dto;
 
 import jakarta.validation.constraints.NotNull;
-import jakarta.validation.constraints.Positive;
+
+import java.util.UUID;
 
 public record AssignTaskRequest(
         @NotNull(message = "ID исполнителя обязателен.")
-        @Positive(message = "ID исполнителя должен быть положительным числом.")
-        Long assigneeId
+        UUID assigneeId
 ) {}

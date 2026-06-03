@@ -1,6 +1,6 @@
 databaseChangeLog:
   - changeSet:
-      id: 1
+      id: create-users-table
       author: ilya-tsimerman
       changes:
         - createTable:
@@ -26,7 +26,7 @@ databaseChangeLog:
                     unique: true
 
   - changeSet:
-      id: 2
+      id: create-tasks-table
       author: ilya-tsimerman
       changes:
         - createTable:

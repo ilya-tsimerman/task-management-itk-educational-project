@@ -17,6 +17,7 @@ public class SecurityConfig {
                 .authorizeExchange(ex -> ex
                         .pathMatchers("/api/auth/register", "/oauth/token").permitAll()
                         .pathMatchers("/api/tasks/**").authenticated()
+                        .pathMatchers("/api/accounts/**").authenticated()
                         .anyExchange().authenticated()
                 )
                 .oauth2ResourceServer(oauth2 -> oauth2

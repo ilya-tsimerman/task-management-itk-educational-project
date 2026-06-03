@@ -1,0 +1,15 @@
+server.port: 8083
+spring.datasource.url: jdbc:postgresql://localhost:5434/accounting_service
+
+spring:
+  jpa:
+    show-sql: true
+    properties:
+      hibernate:
+        format_sql: true
+  kafka.bootstrap-servers: localhost:29092
+
+logging:
+  level:
+    org.springframework.jdbc.datasource.init: DEBUG
+    org.springframework.boot.context.config: TRACE

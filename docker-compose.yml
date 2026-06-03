@@ -1,16 +1,39 @@
 services:
-  postgres:
+  task-db:
     image: postgres:16
-    container_name: db-postgres
-    restart: unless-stopped
+    container_name: task-db
     environment:
-      POSTGRES_DB: task_management
+      POSTGRES_DB: task_service
       POSTGRES_USER: ${POSTGRES_USERNAME}
       POSTGRES_PASSWORD: ${POSTGRES_PASSWORD}
     ports:
       - "5432:5432"
     volumes:
-      - postgres_data:/var/lib/postgresql/data
+      - task-db-data:/var/lib/postgresql/data
+
+  auth-db:
+    image: postgres:16
+    container_name: auth-db
+    environment:
+      POSTGRES_DB: auth_service
+      POSTGRES_USER: ${POSTGRES_USERNAME}
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD}
+    ports:
+      - "5433:5432"
+    volumes:
+      - auth-db-data:/var/lib/postgresql/data
+
+  accounting-db:
+    image: postgres:16
+    container_name: accounting-db
+    environment:
+      POSTGRES_DB: accounting_service
+      POSTGRES_USER: ${POSTGRES_USERNAME}
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD}
+    ports:
+      - "5434:5432"
+    volumes:
+      - accounting-db-data:/var/lib/postgresql/data
 
   kafka:
     image: apache/kafka:latest
@@ -39,13 +62,15 @@ services:
       KEYCLOAK_ADMIN: ${KEYCLOAK_ADMIN}
       KEYCLOAK_ADMIN_PASSWORD: ${KEYCLOAK_ADMIN_PASSWORD}
       KC_DB: postgres
-      KC_DB_URL: jdbc:postgresql://postgres:5432/task_management
+      KC_DB_URL: jdbc:postgresql://auth-db:5432/auth_service
       KC_DB_USERNAME: ${POSTGRES_USERNAME}
       KC_DB_PASSWORD: ${POSTGRES_PASSWORD}
     ports:
       - "9091:8080"
     depends_on:
-      - postgres
+      - auth-db
 
 volumes:
-  postgres_data:
+  task-db-data:
+  auth-db-data:
+  accounting-db-data:
